@@ -13,11 +13,13 @@
 
 * [内置插件及简单的自定义](http://www.cnblogs.com/honker/p/6397591.html)
 
+* [Chromium Release版本 信息](https://blink.lc/chromium/)
 
 #### 步骤概括：
 1. 安装 depot_tools 项目构建工具
 2. 使用 depot_tools 下载源码
 3. 编译 Chromium 源码
+4. 编译稳定版（Stable）分支
 
 ### 一、安装 depot_tools 项目构建工具
 
@@ -74,6 +76,8 @@ $ cd src
 $ gn args out/Release
 
 ```
+> out/**Release** 中 Release 并非固定，可以随意取名
+
 
 3. 设置编译配置选项
 
@@ -82,7 +86,6 @@ $ gn args out/Release
 按 `:wq` 退出
 
 ```
-
 target_cpu = "x64"
 is_debug = false
 symbol_level = 0
@@ -103,6 +106,7 @@ exclude_unwind_tables = true
 $ ninja -C out/Release chrome
 
 ```
+> out/**Release** 中 Release 并非固定，可以随意取名
 
 5. 运行
 
@@ -113,6 +117,48 @@ $ out/Release/Chromium.app/Contents/MacOS/Chromium
 > 编译文件大约 3W 左右， 需要 4-8 个小时
 
 
-#### 脚本
+### 四、编译稳定版（Stable）分支
+
+1. 检查分支（option）
+
+```
+$ git fetch --tags
+
+```
+
+2. 根据指定分支创建分支，并切换到该分支
+
+```
+$ git checkout -b LovenseBrowser_61.0.3163.100 tags/61.0.3163.100
+
+```
+
+3. 同步代码
+
+```
+$ gclient sync --with_branch_heads --jobs 16 
+
+```
+
+
+4. 编译代码
+
+```
+$ ninja -C out/Release chrome
+
+```
+
+5. 运行
+
+```
+$ out/Release/Chromium.app/Contents/MacOS/Chromium
+
+```
+
+> Tip: 同第三步中的第4、5步
+
+### 脚本
+
+以上所以步骤均已写入脚本，可以使用脚本代替。
 
 脚本链接： [Github](https://github.com/Joe0708/ChromiumBuild/blob/master/chromiumBuild.sh)
